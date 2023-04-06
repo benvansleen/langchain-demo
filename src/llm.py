@@ -2,6 +2,7 @@ from langchain import LLMChain
 from langchain.chat_models import ChatOpenAI
 from langchain.agents import load_tools, ZeroShotAgent, AgentExecutor
 from langchain.memory import ConversationBufferMemory
+from .tools import todo_tool
 
 
 def load_memory():
@@ -17,19 +18,29 @@ def run_agent(tools, memory, input):
         temperature=0.0,
     )
 
-    tools = load_tools(tools, llm=llm)
+    tools = load_tools(tools, llm=llm) + todo_tool
 
     prompt = ZeroShotAgent.create_prompt(
         tools,
         prefix='''
-    Have a conversation with a human, answering the following questions as best you can. You have access to the following tools:
+Answer the following questions as best you can. You have access to the following tools:
         ''',
         suffix='''
-    Begin!
+ALWAYS use the following format:
 
-    {chat_history}
-    Question: {input}
-    {agent_scratchpad}
+Question: the input question you must answer
+Thought: you should always think about what to do
+Action: the EXACT name of the tool
+Action Input: the input to the tool
+Observation: the result of the action
+Thought: I now know the final answer
+Final Answer: the final answer to the original input question"""
+
+Begin! REMEMBER TO FOLLOW FORMATTING RULES!
+
+{chat_history}
+Question: {input}
+{agent_scratchpad}
         ''',
         input_variables=['input', 'chat_history', 'agent_scratchpad'],
     )
@@ -46,6 +57,7 @@ def run_agent(tools, memory, input):
         agent=agent,
         tools=tools,
         verbose=True,
+        max_iterations=3,
         memory=memory,
     )
 
