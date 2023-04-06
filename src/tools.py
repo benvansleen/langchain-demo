@@ -36,7 +36,7 @@ def get_todos(*args, **kwargs) -> str:
         todos = '\n'.join([
             f'{i + 1}. {line.strip()}\n'
             for i, line in enumerate(
-                    [l for l in f.readlines() if l.split()]
+                [l for l in f.readlines() if l.split()]
             )
         ])
     return todos

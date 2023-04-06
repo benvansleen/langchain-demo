@@ -31,13 +31,13 @@ with input.container():
     )
     submit = st.button('Submit', key=f'c{2}')
 
+
 def run_agent_chain(i=1):
     global submit
     output.markdown(history(
         st.session_state.prompts,
         st.session_state.chains,
     ), unsafe_allow_html=True)
-
 
     if submit:
         submit = False
