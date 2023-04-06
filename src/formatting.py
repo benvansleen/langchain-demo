@@ -37,7 +37,7 @@ def parse_agent_chain(chain):
         re.findall(r'Thought:(\w?.*)', chain),
         re.findall(r'Action:\s+([^\n]+)', chain),
         re.findall(r'Action Input:\s+([^\n]+)', chain),
-        re.findall(r'Observation: (.*)', chain),
+        re.findall(r'(?<=Observation: )(.*?)(?=Thought:)', chain, re.DOTALL),
         fillvalue='',
     )])
 
