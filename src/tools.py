@@ -14,14 +14,12 @@ def make_todo(todo: str) -> str:
 
 @tool
 def remove_todo(i: int) -> str:
-    '''Remove the ith TODO item using zero-based indexing'''
+    '''Remove the ith TODO item using zero-based indexing. i MUST be an integer.'''
     try:
         i = int(''.join([ch for ch in i if ch.isdigit()]))
         with open(FILE, 'r') as f:
             todos = [todo for todo in f.readlines() if todo.strip()]
-        print(todos)
         to_be_removed = todos[i]
-        print(to_be_removed)
         del todos[i]
         with open(FILE, 'w') as f:
             for todo in todos:
