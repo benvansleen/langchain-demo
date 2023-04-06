@@ -20,22 +20,23 @@ if 'chains' not in st.session_state:
 
 output = st.empty()
 input = st.empty()
+with input.container():
+    text = st.text_input('Enter Query', key=f'a{0}')
+
+    tools = st.multiselect(
+        'Select tools',
+        ['python_repl', 'terminal', 'llm-math', 'serpapi'],
+        [],
+        key=f'b{1}',
+    )
+    submit = st.button('Submit', key=f'c{2}')
+
 def run_agent_chain(i=1):
+    global submit
     output.markdown(history(
         st.session_state.prompts,
         st.session_state.chains,
     ), unsafe_allow_html=True)
-
-    with input.container():
-        text = st.text_input('Enter Query', key=f'a{i}')
-
-        tools = st.multiselect(
-            'Select tools',
-            ['python_repl', 'terminal', 'llm-math', 'serpapi'],
-            [],
-            key=f'b{i}',
-        )
-        submit = st.button('Submit', key=f'c{i}')
 
 
     if submit:
